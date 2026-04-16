@@ -1,2 +1,1 @@
-export { HelloPlugin } from './hello.js'
-export { McpConfigPlugin } from './config-mcp.js'
+export { WorkflowPlugin } from "./workflow-plugin.js"
