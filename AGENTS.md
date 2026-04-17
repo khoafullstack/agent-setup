@@ -6,11 +6,11 @@ pnpm monorepo · 3 packages · TypeScript strict · ESM (`"type": "module"`) · 
 
 ## Packages
 
-| Package | Path | Role |
-|---------|------|------|
-| `@opencode-setup/cli` | `packages/cli/` | CLI tool (Commander.js), entry `bin/opencode-setup.js` |
-| `@opencode-setup/plugins` | `packages/plugins/` | opencode.ai plugins |
-| `@opencode-setup/shared` | `packages/shared/` | Shared types/utilities, consumed by both cli and plugins |
+| Package                   | Path                | Role                                                     |
+| ------------------------- | ------------------- | -------------------------------------------------------- |
+| `@opencode-setup/cli`     | `packages/cli/`     | CLI tool (Commander.js), entry `bin/opencode-setup.js`   |
+| `@opencode-setup/plugins` | `packages/plugins/` | opencode.ai plugins                                      |
+| `@opencode-setup/shared`  | `packages/shared/`  | Shared types/utilities, consumed by both cli and plugins |
 
 Dependency order: `shared` → `cli`, `plugins`. Build `shared` first.
 
@@ -26,6 +26,7 @@ pnpm add -w -D <dep>                    # add root devDep
 ```
 
 CLI can also be run directly before build via tsx:
+
 ```
 tsx packages/cli/src/index.ts hello
 ```
