@@ -1,6 +1,6 @@
 # opencode-setup
 
-Monorepo sử dụng **pnpm workspaces** để quản lý CLI tool và các plugin cho opencode.ai.
+Monorepo sử dụng **pnpm workspaces** để quản lý CLI tool, shared utilities và các plugin cho opencode.ai.
 
 ## Cấu trúc thư mục
 
@@ -17,14 +17,33 @@ opencode-setup/
 │   │   └── src/
 │   │       ├── index.ts
 │   │       └── commands/
-│   │           └── hello.ts
-│   └── plugins/                    # opencode.ai plugins
+│   ├── plugins/                    # opencode.ai plugins
+│   │   ├── package.json
+│   │   ├── tsconfig.json
+│   │   └── src/
+│   │       ├── index.ts
+│   │       ├── config-mcp.ts
+│   │       ├── workflow-plugin.ts
+│   │       ├── agents/
+│   │       └── tools/
+│   └── shared/                     # Shared types & utilities
 │       ├── package.json
 │       ├── tsconfig.json
 │       └── src/
 │           ├── index.ts
-│           └── hello.ts
+│           ├── types.ts
+│           └── utils.ts
 ```
+
+## Packages
+
+| Package | Path | Role |
+|---------|------|------|
+| `@opencode-setup/cli` | `packages/cli/` | CLI tool (Commander.js), entry `bin/opencode-setup.js` |
+| `@opencode-setup/plugins` | `packages/plugins/` | opencode.ai plugins |
+| `@opencode-setup/shared` | `packages/shared/` | Shared types/utilities, consumed by cli và plugins |
+
+Dependency order: `shared` → `cli`, `plugins`. Build `shared` trước.
 
 ## Bắt đầu
 
@@ -39,28 +58,35 @@ opencode-setup/
 pnpm install
 ```
 
-## CLI (`@opencode-setup/cli`)
-
-CLI tool được build bằng TypeScript + Commander.
-
 ### Build
 
 ```bash
-pnpm --filter @opencode-setup/cli build
+pnpm -r build             # build tất cả packages
+pnpm --filter <pkg> build # build 1 package cụ thể
 ```
 
-### Chạy
-
-```bash
-# Hello command
-node packages/cli/bin/opencode-setup.js hello
-# Output: Hello World!
-```
+> Build `shared` trước khi build `cli` hoặc `plugins`.
 
 ### Dev mode (watch)
 
 ```bash
-pnpm --filter @opencode-setup/cli dev
+pnpm --filter @opencode-setup/cli dev   # watch mode cho CLI (tsx watch)
+```
+
+## CLI (`@opencode-setup/cli`)
+
+CLI tool được build bằng TypeScript + Commander.
+
+### Chạy
+
+```bash
+node packages/cli/bin/opencode-setup.js hello
+```
+
+Hoặc chạy trực tiếp qua tsx (không cần build):
+
+```bash
+tsx packages/cli/src/index.ts hello
 ```
 
 ### Thêm command mới
@@ -71,12 +97,6 @@ pnpm --filter @opencode-setup/cli dev
 ## Plugins (`@opencode-setup/plugins`)
 
 Các plugin cho [opencode.ai](https://opencode.ai). Xem thêm tại [docs/plugins](https://opencode.ai/docs/plugins/).
-
-### Build
-
-```bash
-pnpm --filter @opencode-setup/plugins build
-```
 
 ### Sử dụng plugin
 
@@ -95,6 +115,23 @@ Hoặc publish lên npm và thêm vào `opencode.json`:
 1. Tạo file `packages/plugins/src/<name>.ts`
 2. Export trong `packages/plugins/src/index.ts`
 3. Implement theo [Plugin API](https://opencode.ai/docs/plugins/#events)
+
+## Shared (`@opencode-setup/shared`)
+
+Chứa các types và utilities dùng chung cho `cli` và `plugins`.
+
+### Cấu trúc
+
+- `src/types.ts` — TypeScript interfaces/types
+- `src/utils.ts` — Utility functions
+
+### Build
+
+```bash
+pnpm --filter @opencode-setup/shared build
+```
+
+Output: `dist/index.js` + `dist/index.d.ts`
 
 ## Lệnh hay dùng
 

@@ -1,5 +1,20 @@
 # AGENTS.md
 
+## Agent Skills Policy
+
+Available skills are listed inside the <available_skills> tag in your system prompt.
+
+Before starting ANY task, you MUST:
+
+1. Review the list inside <available_skills> to see what skills are available
+2. Identify which skills are relevant to the current task
+3. Load all relevant skills using the `load_skill` tool BEFORE proceeding with the work
+4. If a matching skill exists for the task type, you are REQUIRED to load and follow it —
+   do not skip this step
+
+Do not rely on memory or general knowledge when a skill is available.
+Skills contain up-to-date, project-specific instructions that must be followed.
+
 ## Repo
 
 pnpm monorepo · 3 packages · TypeScript strict · ESM (`"type": "module"`) · Node 18+
